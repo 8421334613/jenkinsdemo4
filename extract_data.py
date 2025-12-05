@@ -1,31 +1,8 @@
-pipeline{
-    agent any
-    environment{
-        Python='C:\Users\sakha\AppData\Local\Programs\Python\Python311\python.exe'
-    }
+import requests
+import pandas as pd
 
-    stages{
-        
-        stage{
-            name: 'Checkout'
-            steps{
-                checkout scm
-            }
-        }
-        stage('Extract Data'){
-            steps{
-                script{
-                    bat """${Python} extract_data.py > extracted_data.csv"""
-                }
-            }
-        }
-        stage('install dependencies'){
-            steps{
-                script{
-                    bat """${Python} extract_data.py > extract_data.csv"""
-                }
-            }
-        }
-    }
-}
+data=requests.get("https://jsonplaceholder.typicode.com/users").json()
 
+df=pd.DataFrame(data)
+df=df[['id','name','username','email']]
+print(df)
